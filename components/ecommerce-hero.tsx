@@ -28,9 +28,6 @@ export function EcommerceHero() {
             Shop Fresh Fruits
           </Button>
         </Link>
-        <Button variant="outline" size="lg" className="text-sm sm:text-base">
-          Learn More
-        </Button>
       </div>
 
       {/* Stats */}
