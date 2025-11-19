@@ -5,7 +5,7 @@ A cloud-based web application that facilitates direct trade between farmers and 
 ## Tech Stack
 
 - **Frontend**: Next.js, React, TypeScript, Tailwind CSS
-- **Backend**: Appwrite, Supabase
+- **Database**: Appwrite, Supabase
 - **Image Management**: Cloudinary
 - **Email Service**: Nodemailer
 - **UI Components**: Radix UI
