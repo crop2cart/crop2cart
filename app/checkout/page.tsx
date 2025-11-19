@@ -31,7 +31,70 @@ interface CheckoutState {
   newsletter: boolean;
 }
 
+interface FormErrors {
+  [key: string]: string;
+}
+
 const CART_STORAGE_KEY = "home-guardian-cart";
+
+const INDIAN_STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+];
+
+// Validation functions
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^[0-9]{10}$/;
+  return phoneRegex.test(phone.replace(/\s/g, ""));
+};
+
+const validateZipCode = (zipCode: string): boolean => {
+  const zipRegex = /^[0-9]{6}$/;
+  return zipRegex.test(zipCode);
+};
+
+const validateName = (name: string): boolean => {
+  return name.trim().length >= 2;
+};
+
+const validateAddress = (address: string): boolean => {
+  return address.trim().length >= 5;
+};
+
+const validateCity = (city: string): boolean => {
+  return city.trim().length >= 2;
+};
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -62,11 +125,12 @@ export default function CheckoutPage() {
   }
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderId, setOrderId] = useState<string>("");
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<CheckoutState>({
     email: "",
     firstName: "",
     lastName: "",
-    country: "United States",
+    country: "India",
     address: "",
     apartment: "",
     city: "",
@@ -100,16 +164,77 @@ export default function CheckoutPage() {
   }, [user]);
 
   const handlePlaceOrder = async () => {
+    // Reset errors
+    setFormErrors({});
+    
+    // Validate all required fields
+    const errors: FormErrors = {};
+
+    // Email validation
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    // First name validation
+    if (!formData.firstName) {
+      errors.firstName = "First name is required";
+    } else if (!validateName(formData.firstName)) {
+      errors.firstName = "First name must be at least 2 characters";
+    }
+
+    // Last name validation
+    if (!formData.lastName) {
+      errors.lastName = "Last name is required";
+    } else if (!validateName(formData.lastName)) {
+      errors.lastName = "Last name must be at least 2 characters";
+    }
+
+    // Address validation
+    if (!formData.address) {
+      errors.address = "Address is required";
+    } else if (!validateAddress(formData.address)) {
+      errors.address = "Address must be at least 5 characters";
+    }
+
+    // City validation
+    if (!formData.city) {
+      errors.city = "City is required";
+    } else if (!validateCity(formData.city)) {
+      errors.city = "City must be at least 2 characters";
+    }
+
+    // State validation
+    if (!formData.state) {
+      errors.state = "State is required";
+    }
+
+    // Zip code validation
+    if (!formData.zipCode) {
+      errors.zipCode = "PIN Code is required";
+    } else if (!validateZipCode(formData.zipCode)) {
+      errors.zipCode = "PIN Code must be exactly 6 digits";
+    }
+
+    // Phone validation
+    if (!formData.phone) {
+      errors.phone = "Phone number is required";
+    } else if (!validatePhone(formData.phone)) {
+      errors.phone = "Phone number must be exactly 10 digits";
+    }
+
+    // If there are errors, show them and stop
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      alert("Please fix all validation errors");
+      return;
+    }
+
     // Check if user is authenticated
     if (!user || !user.id) {
       alert("You must be signed in to place an order");
       router.push("/home?auth=signin");
-      return;
-    }
-
-    // Validate required fields
-    if (!formData.email || !formData.firstName || !formData.lastName || !formData.address || !formData.city || !formData.phone) {
-      alert("Please fill in all required fields");
       return;
     }
 
@@ -124,7 +249,7 @@ export default function CheckoutPage() {
       const shippingAddress = `${formData.address}${formData.apartment ? ", " + formData.apartment : ""}, ${formData.city}, ${formData.state} ${formData.zipCode}, ${formData.country}`;
       
       const totalAmount = cartItems.reduce(
-        (sum, item) => sum + item.finalPrice * item.quantity,
+        (sum: number, item: CartItem) => sum + item.finalPrice * item.quantity,
         0
       );
 
@@ -171,7 +296,7 @@ export default function CheckoutPage() {
   };
 
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.finalPrice * item.quantity,
+    (sum: number, item: CartItem) => sum + item.finalPrice * item.quantity,
     0
   );
   const shipping = 0;
@@ -221,14 +346,17 @@ export default function CheckoutPage() {
             {/* Contact Section */}
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Contact</h2>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email or mobile phone number"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-              />
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email or mobile phone number"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.email ? "border-red-500" : ""}`}
+                />
+                {formErrors.email && <p className="text-xs text-red-500 mt-1">{formErrors.email}</p>}
+              </div>
               <label className="flex items-center gap-2 mt-4 cursor-pointer">
                 <input
                   type="checkbox"
@@ -249,39 +377,42 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                  Country/Region
+                  Country/Region *
                 </label>
                 <select
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  disabled
                 >
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>Mexico</option>
-                  <option>UK</option>
-                  <option>Australia</option>
+                  <option>India</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First name (optional)"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className="px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last name"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className="px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
+                <div>
+                  <input
+                    type="text"
+                    name="firstName"
+                    placeholder="First name"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.firstName ? "border-red-500" : ""}`}
+                  />
+                  {formErrors.firstName && <p className="text-xs text-red-500 mt-1">{formErrors.firstName}</p>}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    name="lastName"
+                    placeholder="Last name"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.lastName ? "border-red-500" : ""}`}
+                  />
+                  {formErrors.lastName && <p className="text-xs text-red-500 mt-1">{formErrors.lastName}</p>}
+                </div>
               </div>
 
               <div className="mb-4">
@@ -291,8 +422,9 @@ export default function CheckoutPage() {
                   placeholder="Address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.address ? "border-red-500" : ""}`}
                 />
+                {formErrors.address && <p className="text-xs text-red-500 mt-1">{formErrors.address}</p>}
               </div>
 
               <div className="mb-4">
@@ -307,34 +439,45 @@ export default function CheckoutPage() {
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <input
-                  type="text"
-                  name="city"
-                  placeholder="City"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  className="px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-                <select
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  className="px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                  <option value="">State</option>
-                  <option>CA</option>
-                  <option>NY</option>
-                  <option>TX</option>
-                  <option>FL</option>
-                </select>
-                <input
-                  type="text"
-                  name="zipCode"
-                  placeholder="ZIP code"
-                  value={formData.zipCode}
-                  onChange={handleInputChange}
-                  className="px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
+                <div>
+                  <input
+                    type="text"
+                    name="city"
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.city ? "border-red-500" : ""}`}
+                  />
+                  {formErrors.city && <p className="text-xs text-red-500 mt-1">{formErrors.city}</p>}
+                </div>
+                <div>
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.state ? "border-red-500" : ""}`}
+                  >
+                    <option value="">Select State</option>
+                    {INDIAN_STATES.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                  {formErrors.state && <p className="text-xs text-red-500 mt-1">{formErrors.state}</p>}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    name="zipCode"
+                    placeholder="PIN Code"
+                    value={formData.zipCode}
+                    onChange={handleInputChange}
+                    maxLength={6}
+                    className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.zipCode ? "border-red-500" : ""}`}
+                  />
+                  {formErrors.zipCode && <p className="text-xs text-red-500 mt-1">{formErrors.zipCode}</p>}
+                </div>
               </div>
 
               <div className="mb-4">
@@ -344,9 +487,10 @@ export default function CheckoutPage() {
                   placeholder="Phone number"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  maxLength={10}
+                  className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.phone ? "border-red-500" : ""}`}
                 />
+                {formErrors.phone && <p className="text-xs text-red-500 mt-1">{formErrors.phone}</p>}
               </div>
 
               <label className="flex items-center gap-2 cursor-pointer">
