@@ -1,0 +1,37 @@
+@layer utilities {
+  @keyframes skeleton-loading {
+    0% {
+      background-color: oklch(0.205 0 0);
+    }
+    50% {
+      background-color: oklch(0.269 0 0);
+    }
+    100% {
+      background-color: oklch(0.205 0 0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-pulse {
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      oklch(0.205 0 0) 0%,
+      oklch(0.269 0 0) 20%,
+      oklch(0.205 0 0) 40%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+}
