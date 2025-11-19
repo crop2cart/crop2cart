@@ -13,7 +13,7 @@ export function EcommerceHero() {
 
       {/* Main Heading */}
       <h1 className="mt-4 sm:mt-5 max-w-4xl mx-auto text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold tracking-tighter text-balance mb-4 sm:mb-6">
-        Fresh Fruits Directly From Farmers
+        Fresh Products Directly From Farmers
       </h1>
 
       {/* Subheading */}

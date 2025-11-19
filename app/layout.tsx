@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HomeGuardian",
+  title: "Crop2Cart",
   description: "Find Safety in Your Home with a Tech Smart Assistant",
 };
 
