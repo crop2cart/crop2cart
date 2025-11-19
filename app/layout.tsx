@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Crop2Cart",
-  description: "Find Safety in Your Home with a Tech Smart Assistant",
+  description: "No middlemen. No markups. Just fresh, organic fruits delivered straight from local farmers",
 };
 
 export default function RootLayout({
