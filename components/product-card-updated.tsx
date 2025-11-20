@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, ShoppingCart, X } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -27,6 +28,7 @@ export function ProductCard({
   category,
   onAddToCart,
 }: ProductCardProps) {
+  const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -171,7 +173,7 @@ export function ProductCard({
             size="sm"
           >
             <ShoppingCart className="size-4" />
-            {addedToCart ? "✓ Added!" : "Add to Cart"}
+            {addedToCart ? t('product.added') : t('product.add')}
           </Button>
 
           {/* View More Link */}
@@ -179,7 +181,7 @@ export function ProductCard({
             onClick={() => setShowModal(true)}
             className="w-full text-xs text-primary hover:underline py-1"
           >
-            View Details
+            {t('product.viewDetails')}
           </button>
         </div>
       </div>
@@ -335,7 +337,7 @@ export function ProductCard({
                     size="lg"
                   >
                     <ShoppingCart className="size-5" />
-                    Add {quantity} to Cart
+                    {t('product.add')} {quantity} {t('product.add').split(' ')[0]}
                   </Button>
 
                   <Button
@@ -344,7 +346,7 @@ export function ProductCard({
                     className="w-full"
                     size="lg"
                   >
-                    Continue Shopping
+                    {t('product.continueShopping')}
                   </Button>
                 </div>
               </div>

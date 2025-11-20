@@ -1,6 +1,7 @@
 import { MenuIcon, XIcon } from "lucide-react";
 import { Logo } from "./logo";
 import { NavMenu } from "./nav-menu";
+import { LanguageToggle } from "./language-toggle";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export function Navbar() {
@@ -10,8 +11,9 @@ export function Navbar() {
         <Logo />
 
         {/* Desktop navigation menu */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center gap-4">
           <NavMenu />
+          <LanguageToggle />
         </div>
 
         {/* Mobile navigation menu */}
@@ -22,9 +24,12 @@ export function Navbar() {
           </PopoverTrigger>
           <PopoverContent
             sideOffset={28}
-            className="bg-background h-[calc(100svh-3rem)] w-screen !animate-none rounded-none border-none"
+            className="bg-background h-[calc(100svh-3rem)] w-screen !animate-none rounded-none border-none flex flex-col"
           >
             <NavMenu orientation="vertical" />
+            <div className="mt-4 border-t pt-4">
+              <LanguageToggle />
+            </div>
           </PopoverContent>
         </Popover>
       </nav>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { X, Loader2, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface AuthModalProps {
 
 export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
   const { setUser, setToken } = useAuth();
+  const { t } = useTranslation();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -159,10 +161,10 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
         <div className="flex items-center justify-between p-6 border-b border-dashed">
           <h2 className="text-xl font-bold">
             {verifyStep
-              ? "Verify Email"
+              ? t('auth.verifyEmail')
               : mode === "signin"
-                ? "Sign In"
-                : "Create Account"}
+                ? t('auth.signIn')
+                : t('auth.createAccount')}
           </h2>
           <button
             onClick={() => {
@@ -193,12 +195,12 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
           {verifyStep ? (
             <form onSubmit={handleVerifyOTP} className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                We've sent a verification code to <span className="font-medium">{email}</span>
+                {t('auth.verificationSent')} <span className="font-medium">{email}</span>
               </p>
 
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Enter 6-digit Code
+                  {t('auth.enter6Digit')}
                 </label>
                 <input
                   type="text"
@@ -220,7 +222,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                 size="lg"
               >
                 {loading && <Loader2 className="size-4 animate-spin" />}
-                Verify & Sign Up
+                {t('auth.verifyCode')}
               </Button>
 
               <button
@@ -231,13 +233,13 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                 }}
                 className="w-full text-sm text-primary hover:underline"
               >
-                Back to Signup
+                {t('auth.backToSignup')}
               </button>
             </form>
           ) : mode === "signin" ? (
             <form onSubmit={handleSignin} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
+                <label className="block text-sm font-medium mb-2">{t('auth.emailLabel')}</label>
                 <input
                   type="email"
                   value={email}
@@ -249,7 +251,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Password</label>
+                <label className="block text-sm font-medium mb-2">{t('auth.passwordLabel')}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -280,11 +282,11 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                 size="lg"
               >
                 {loading && <Loader2 className="size-4 animate-spin" />}
-                Sign In
+                {t('auth.signInButton')}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                {t('auth.dontHaveAccount')} {" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -294,7 +296,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                   }}
                   className="text-primary hover:underline font-medium"
                 >
-                  Sign Up
+                  {t('auth.noAccount')}
                 </button>
               </div>
             </form>
@@ -302,7 +304,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
             <form onSubmit={handleSignup} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Full Name
+                  {t('auth.nameLabel')}
                 </label>
                 <input
                   type="text"
@@ -315,7 +317,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
+                <label className="block text-sm font-medium mb-2">{t('auth.emailLabel')}</label>
                 <input
                   type="email"
                   value={email}
@@ -327,7 +329,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Password</label>
+                <label className="block text-sm font-medium mb-2">{t('auth.passwordLabel')}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -351,7 +353,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                   </button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Minimum 6 characters
+                  {t('auth.minPassword')}
                 </p>
               </div>
 
@@ -362,11 +364,11 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                 size="lg"
               >
                 {loading && <Loader2 className="size-4 animate-spin" />}
-                Create Account
+                {t('auth.createAccountButton')}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t('auth.alreadyHaveAccount')} {" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -376,7 +378,7 @@ export function OTPAuthModal({ isOpen, onClose, onLogin }: AuthModalProps) {
                   }}
                   className="text-primary hover:underline font-medium"
                 >
-                  Sign In
+                  {t('auth.haveAccount')}
                 </button>
               </div>
             </form>

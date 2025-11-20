@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, ShoppingCart, X } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -29,6 +30,7 @@ export function ProductCard({
   category,
   onAddToCart,
 }: ProductCardProps) {
+  const { t } = useTranslation();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -98,7 +100,7 @@ export function ProductCard({
                 : "bg-red-100 text-red-800"
             }`}
           >
-            {inStock ? "In Stock" : "Out of Stock"}
+            {inStock ? t('product.inStock') : t('product.outOfStock')}
           </div>
 
           {/* Discount Badge */}
@@ -203,7 +205,7 @@ export function ProductCard({
             title={quantity > stock ? `Max ${stock} available` : ""}
           >
             <ShoppingCart className="size-4" />
-            {addedToCart ? "✓ Added!" : "Add to Cart"}
+            {addedToCart ? t('product.added') : t('product.add')}
           </Button>
 
           {/* View More Link */}
@@ -211,7 +213,7 @@ export function ProductCard({
             onClick={() => setShowModal(true)}
             className="w-full text-xs text-primary hover:underline py-1"
           >
-            View Details
+            {t('product.viewDetails')}
           </button>
         </div>
       </div>
@@ -296,7 +298,7 @@ export function ProductCard({
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {inStock ? "✓ In Stock" : "✗ Out of Stock"}
+                    {inStock ? "✓ " + t('product.inStock') : "✗ " + t('product.outOfStock')}
                   </span>
                 </div>
 
@@ -315,7 +317,7 @@ export function ProductCard({
 
                 {/* Description */}
                 <div>
-                  <h4 className="font-semibold mb-2">Description</h4>
+                  <h4 className="font-semibold mb-2">{t('product.description')}</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {description}
                   </p>
@@ -323,12 +325,12 @@ export function ProductCard({
 
                 {/* Product Details */}
                 <div className="space-y-2 text-sm">
-                  <h4 className="font-semibold">Product Details</h4>
+                  <h4 className="font-semibold">{t('product.details')}</h4>
                   <div className="space-y-1 text-muted-foreground">
-                    <p>• 100% Fresh & Organic</p>
-                    <p>• Directly from Farmers</p>
-                    <p>• 24-Hour Delivery</p>
-                    <p>• Quality Assured</p>
+                    <p>• {t('product.organic')}</p>
+                    <p>• {t('product.direct')}</p>
+                    <p>• {t('product.delivery')}</p>
+                    <p>• {t('product.quality')}</p>
                   </div>
                 </div>
 
@@ -336,7 +338,7 @@ export function ProductCard({
                 <div className="space-y-3 pt-4 border-t border-dashed">
                   <div>
                     <label className="text-sm font-medium mb-2 block">
-                      Quantity
+                      {t('product.quantity')}
                     </label>
                     <div className="flex items-center gap-2 bg-muted rounded-lg p-2 w-fit">
                       <button
@@ -367,7 +369,7 @@ export function ProductCard({
                     size="lg"
                   >
                     <ShoppingCart className="size-5" />
-                    Add {quantity} to Cart
+                    {t('product.add')} {quantity} {t('product.add').split(' ')[0]}
                   </Button>
 
                   <Button
@@ -376,7 +378,7 @@ export function ProductCard({
                     className="w-full"
                     size="lg"
                   >
-                    Continue Shopping
+                    {t('product.continueShopping')}
                   </Button>
                 </div>
               </div>

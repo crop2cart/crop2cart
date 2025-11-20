@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { ChevronDown, MapPin, Zap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Farmer, FARMERS } from "@/lib/farmers";
 
 export function LocationFilter({ onFarmerSelect, farmers }: { onFarmerSelect?: (farmerId: string) => void; farmers?: Farmer[] }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null);
   const displayFarmers = farmers || FARMERS;
@@ -41,7 +43,7 @@ export function LocationFilter({ onFarmerSelect, farmers }: { onFarmerSelect?: (
           <MapPin className="size-4" />
           <div className="text-left">
             <div className="text-xs font-medium text-muted-foreground">
-              Delivery to
+              {t('filter.deliveryTo')}
             </div>
             <div className="text-sm font-semibold truncate">
               {selectedFarmer.location}
@@ -58,9 +60,9 @@ export function LocationFilter({ onFarmerSelect, farmers }: { onFarmerSelect?: (
         <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-dashed rounded-lg shadow-lg z-50 overflow-hidden">
           {/* Header */}
           <div className="px-3 sm:px-4 py-2 sm:py-3 border-b border-dashed bg-muted/30">
-            <h3 className="text-xs sm:text-sm font-semibold">Select Nearby Farmer</h3>
+            <h3 className="text-xs sm:text-sm font-semibold">{t('filter.selectFarmer')}</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Choose from our nearby farming partners
+              {t('filter.nearbyFarmers')}
             </p>
           </div>
 

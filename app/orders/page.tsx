@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { useWebSocket } from '@/app/context/WebSocketContext';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Package, Truck, Check, Clock, Loader2, X, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { OrderCardSkeleton } from '@/components/skeletons';
@@ -32,6 +33,7 @@ interface Order {
 
 export default function OrdersPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const { isConnected, subscribe } = useWebSocket();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -126,20 +128,14 @@ export default function OrdersPage() {
 
   const getStatusLabel = (status: string) => {
     const lowerStatus = status?.toLowerCase();
-    switch (lowerStatus) {
-      case 'delivered':
-        return 'Delivered';
-      case 'processing':
-        return 'Processing';
-      case 'in-transit':
-        return 'In Transit';
-      case 'pending':
-        return 'Pending';
-      case 'cancelled':
-        return 'Cancelled';
-      default:
-        return status?.charAt(0).toUpperCase() + status?.slice(1) || 'Unknown';
-    }
+    const statusMap: { [key: string]: string } = {
+      'delivered': t('orders.delivered'),
+      'processing': t('orders.processing'),
+      'in-transit': t('orders.shipped'),
+      'pending': t('orders.pending'),
+      'cancelled': t('orders.cancelled'),
+    };
+    return statusMap[lowerStatus] || status?.charAt(0).toUpperCase() + status?.slice(1) || 'Unknown';
   };
 
   const getStatusColor = (status: string) => {
@@ -174,7 +170,7 @@ export default function OrdersPage() {
           </button>
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold">My Orders</h1>
+              <h1 className="text-3xl font-bold">{t('orders.title')}</h1>
               <p className="text-muted-foreground mt-1">Track and manage your orders</p>
             </div>
             <div className="flex items-center gap-3">
@@ -186,7 +182,7 @@ export default function OrdersPage() {
               ) : (
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200">
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <span className="text-xs font-medium text-yellow-700">Connecting...</span>
+                  <span className="text-xs font-medium text-yellow-700">{t('orders.connecting')}</span>
                 </div>
               )}
               <button
@@ -196,7 +192,7 @@ export default function OrdersPage() {
                 title="Refresh orders"
               >
                 <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
-                <span className="text-sm font-medium">Refresh</span>
+                <span className="text-sm font-medium">{t('orders.refresh')}</span>
               </button>
             </div>
           </div>
@@ -214,13 +210,13 @@ export default function OrdersPage() {
         ) : error ? (
           <div className="text-center py-12">
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Error loading orders</h2>
+            <h2 className="text-xl font-semibold mb-2">{t('orders.error')}</h2>
             <p className="text-muted-foreground">{error}</p>
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No orders yet</h2>
+            <h2 className="text-xl font-semibold mb-2">{t('orders.noOrders')}</h2>
             <p className="text-muted-foreground">Start shopping to place your first order!</p>
           </div>
         ) : (

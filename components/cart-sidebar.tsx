@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
@@ -29,6 +30,7 @@ export function CartSidebar({
   onUpdateQuantity,
   onRemove,
 }: CartSidebarProps) {
+  const { t } = useTranslation();
   const cartTotal = items.reduce((sum, item) => sum + (item.finalPrice || item.price || 0) * item.quantity, 0);
 
   return (
@@ -49,7 +51,7 @@ export function CartSidebar({
       >
         {/* Header */}
         <div className="sticky top-0 bg-background border-b border-dashed p-3 sm:p-6 flex items-center justify-between">
-          <h2 className="text-lg sm:text-2xl font-semibold">My Cart</h2>
+          <h2 className="text-lg sm:text-2xl font-semibold">{t('cart.title')}</h2>
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-accent rounded-lg transition-colors flex-shrink-0"
@@ -63,7 +65,7 @@ export function CartSidebar({
           {items.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-5xl sm:text-6xl mb-4">🛒</div>
-              <p className="text-xs sm:text-sm text-muted-foreground">Your cart is empty</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('cart.empty')}</p>
             </div>
           ) : (
             <>
@@ -121,19 +123,19 @@ export function CartSidebar({
               {/* Summary */}
               <div className="border-t border-dashed pt-4 space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground">{t('cart.subtotal')}</span>
                   <span className="font-medium">₹{cartTotal.toFixed(0)} INR</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Taxes</span>
+                  <span className="text-muted-foreground">{t('cart.taxes')}</span>
                   <span className="font-medium">₹0 INR</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span className="font-medium">Calculated at checkout</span>
+                  <span className="text-muted-foreground">{t('cart.shipping')}</span>
+                  <span className="font-medium">{t('cart.calculatedAtCheckout')}</span>
                 </div>
                 <div className="border-t border-dashed pt-3 flex justify-between">
-                  <span className="font-semibold">Total</span>
+                  <span className="font-semibold">{t('cart.total')}</span>
                   <span className="text-lg font-bold text-primary">
                     ₹{cartTotal.toFixed(0)} INR
                   </span>
@@ -143,7 +145,7 @@ export function CartSidebar({
               {/* Checkout Button */}
               <Link href="/checkout" onClick={onClose} className="block">
                 <Button className="w-full" size="lg">
-                  Proceed to Checkout
+                  {t('cart.checkoutBtn')}
                 </Button>
               </Link>
             </>

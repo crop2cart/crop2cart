@@ -4,6 +4,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import enTranslation from '@/public/locales/en/translation.json';
 import teTranslation from '@/public/locales/te/translation.json';
 
+const isServer = typeof window === 'undefined';
+
 i18next
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -13,6 +15,7 @@ i18next
       te: { translation: teTranslation },
     },
     fallbackLng: 'en',
+    lng: isServer ? 'en' : undefined, // Force 'en' on server
     defaultNS: 'translation',
     interpolation: {
       escapeValue: false,
@@ -20,6 +23,9 @@ i18next
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
+    },
+    react: {
+      useSuspense: false,
     },
   });
 

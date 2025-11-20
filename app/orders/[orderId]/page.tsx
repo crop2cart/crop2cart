@@ -3,6 +3,7 @@
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { useWebSocket } from '@/app/context/WebSocketContext';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Loader2, Package, Check, Clock, Truck, X, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -33,6 +34,7 @@ export default function OrderDetailPage() {
   const params = useParams();
   const { user, loading } = useAuth();
   const { isConnected, subscribe } = useWebSocket();
+  const { t } = useTranslation();
   const [order, setOrder] = useState<Order | null>(null);
   const [orderLoading, setOrderLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -159,13 +161,13 @@ export default function OrderDetailPage() {
               className="flex items-center gap-2 text-sm font-medium text-primary hover:underline mb-4"
             >
               <ArrowLeft size={18} />
-              Back
+              {t('nav.back')}
             </button>
           </div>
         </div>
         <div className="container py-8 text-center">
           <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error loading order</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('orders.error')}</h2>
           <p className="text-muted-foreground">{error}</p>
         </div>
       </div>
@@ -182,23 +184,23 @@ export default function OrderDetailPage() {
             className="flex items-center gap-2 text-sm font-medium text-primary hover:underline mb-4"
           >
             <ArrowLeft size={18} />
-            Back to Orders
+            {t('orders.backToOrders')}
           </button>
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold">Order Details</h1>
+              <h1 className="text-3xl font-bold">{t('orders.orderDetails')}</h1>
               <p className="text-muted-foreground mt-1">Order {order.orderId}</p>
             </div>
             <div className="flex items-center gap-3">
               {isConnected ? (
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 border border-green-200">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-xs font-medium text-green-700">Live</span>
+                  <span className="text-xs font-medium text-green-700">{t('orders.live')}</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-50 border border-yellow-200">
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <span className="text-xs font-medium text-yellow-700">Connecting...</span>
+                  <span className="text-xs font-medium text-yellow-700">{t('orders.connecting')}</span>
                 </div>
               )}
               <button
@@ -208,7 +210,7 @@ export default function OrderDetailPage() {
                 title="Refresh order status"
               >
                 <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} />
-                <span className="text-sm font-medium">Refresh</span>
+                <span className="text-sm font-medium">{t('orders.refresh')}</span>
               </button>
             </div>
           </div>
@@ -226,7 +228,7 @@ export default function OrderDetailPage() {
                 <div className="flex items-start gap-4">
                   {getStatusIcon(order.status)}
                   <div>
-                    <p className="text-sm font-medium opacity-75">Current Status</p>
+                    <p className="text-sm font-medium opacity-75">{t('orders.currentStatus')}</p>
                     <p className="text-2xl font-bold">{getStatusLabel(order.status)}</p>
                   </div>
                 </div>
@@ -235,7 +237,7 @@ export default function OrderDetailPage() {
 
             {/* Order Items */}
             <div className="border border-border rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Order Items</h2>
+              <h2 className="text-xl font-bold mb-4">{t('orders.orderItems')}</h2>
               <div className="space-y-4">
                 {order.items.map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between pb-4 border-b border-border last:border-b-0">
@@ -255,7 +257,7 @@ export default function OrderDetailPage() {
               </div>
               <div className="mt-6 pt-4 border-t border-border">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-lg">Total</span>
+                  <span className="font-semibold text-lg">{t('orders.total')}</span>
                   <span className="text-2xl font-bold text-primary">₹{Math.round(order.totalAmount).toLocaleString()}</span>
                 </div>
               </div>
@@ -263,10 +265,10 @@ export default function OrderDetailPage() {
 
             {/* Shipping Address */}
             <div className="border border-border rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Shipping Address</h2>
+              <h2 className="text-xl font-bold mb-4">{t('orders.shippingAddress')}</h2>
               <p className="text-base whitespace-pre-wrap">{order.shippingAddress}</p>
               {order.phone && (
-                <p className="mt-4 text-sm text-muted-foreground">Phone: {order.phone}</p>
+                <p className="mt-4 text-sm text-muted-foreground">{t('orders.phone')}: {order.phone}</p>
               )}
             </div>
           </div>
@@ -275,14 +277,14 @@ export default function OrderDetailPage() {
           <div className="space-y-6">
             {/* Order Summary Card */}
             <div className="border border-border rounded-lg p-6 sticky top-24">
-              <h3 className="font-bold text-lg mb-4">Order Summary</h3>
+              <h3 className="font-bold text-lg mb-4">{t('orders.orderSummary')}</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Order ID</span>
+                  <span className="text-muted-foreground">{t('orders.orderId')}</span>
                   <span className="font-medium">{order.orderId}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Order Date</span>
+                  <span className="text-muted-foreground">{t('orders.orderDate')}</span>
                   <span className="font-medium">
                     {new Date(order.createdAt * 1000).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -292,12 +294,12 @@ export default function OrderDetailPage() {
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Customer</span>
+                  <span className="text-muted-foreground">{t('orders.customer')}</span>
                   <span className="font-medium">{order.userName}</span>
                 </div>
                 <div className="border-t border-border pt-3 mt-3">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status</span>
+                    <span className="text-muted-foreground">{t('orders.status')}</span>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
                       {getStatusLabel(order.status)}
                     </span>
@@ -308,7 +310,7 @@ export default function OrderDetailPage() {
               {/* Auto-refresh info */}
               <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-dashed">
                 <p className="text-xs text-muted-foreground text-center">
-                  Status updates in real-time. Refresh page to see latest updates from admin.
+                  {t('orders.statusUpdates')}
                 </p>
               </div>
             </div>

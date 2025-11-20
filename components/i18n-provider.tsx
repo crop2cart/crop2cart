@@ -11,9 +11,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     setIsInitialized(true);
   }, []);
 
+  // Don't render i18n provider until after hydration to prevent mismatch
   if (!isInitialized) {
     return <>{children}</>;
   }
 
   return <I18nextProvider i18n={i18next}>{children}</I18nextProvider>;
 }
+

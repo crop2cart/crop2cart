@@ -6,6 +6,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CheckCircle, X, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface CartItem {
   id: string;
@@ -98,6 +99,7 @@ const validateCity = (city: string): boolean => {
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -323,7 +325,7 @@ export default function CheckoutPage() {
               <h1 className="text-xl font-bold">🍎 Crop2Cart</h1>
             </div>
             <Link href="/home" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Continue Shopping
+              {t('checkout.continueShopping')}
             </Link>
           </div>
         </div>
@@ -336,21 +338,21 @@ export default function CheckoutPage() {
           <div className="lg:col-span-2">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm mb-8">
-              <span>Information</span>
+              <span>{t('checkout.information')}</span>
               <span className="text-muted-foreground">&gt;</span>
-              <span className="text-muted-foreground">Shipping</span>
+              <span className="text-muted-foreground">{t('checkout.shipping')}</span>
               <span className="text-muted-foreground">&gt;</span>
-              <span className="text-muted-foreground">Payment</span>
+              <span className="text-muted-foreground">{t('checkout.payment')}</span>
             </div>
 
             {/* Contact Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-bold mb-4">Contact</h2>
+              <h2 className="text-xl font-bold mb-4">{t('checkout.contact')}</h2>
               <div>
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email or mobile phone number"
+                  placeholder={t('checkout.email')}
                   value={formData.email}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.email ? "border-red-500" : ""}`}
@@ -366,18 +368,18 @@ export default function CheckoutPage() {
                   className="rounded"
                 />
                 <span className="text-sm text-muted-foreground">
-                  Email me with news and offers
+                  {t('checkout.emailMe')}
                 </span>
               </label>
             </div>
 
             {/* Shipping Address Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-bold mb-4">Shipping address</h2>
+              <h2 className="text-xl font-bold mb-4">{t('checkout.shippingAddress')}</h2>
 
               <div className="mb-4">
                 <label className="text-sm font-medium text-muted-foreground mb-2 block">
-                  Country/Region *
+                  {t('checkout.country')} *
                 </label>
                 <select
                   name="country"
@@ -395,7 +397,7 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     name="firstName"
-                    placeholder="First name"
+                    placeholder={t('checkout.firstName')}
                     value={formData.firstName}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.firstName ? "border-red-500" : ""}`}
@@ -406,7 +408,7 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     name="lastName"
-                    placeholder="Last name"
+                    placeholder={t('checkout.lastName')}
                     value={formData.lastName}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.lastName ? "border-red-500" : ""}`}
@@ -419,7 +421,7 @@ export default function CheckoutPage() {
                 <input
                   type="text"
                   name="address"
-                  placeholder="Address"
+                  placeholder={t('checkout.address')}
                   value={formData.address}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.address ? "border-red-500" : ""}`}
@@ -431,7 +433,7 @@ export default function CheckoutPage() {
                 <input
                   type="text"
                   name="apartment"
-                  placeholder="Apartment, suite, etc. (optional)"
+                  placeholder={t('checkout.apartment')}
                   value={formData.apartment}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -443,7 +445,7 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     name="city"
-                    placeholder="City"
+                    placeholder={t('checkout.city')}
                     value={formData.city}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.city ? "border-red-500" : ""}`}
@@ -457,7 +459,7 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 rounded-lg border border-dashed bg-background hover:border-primary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${formErrors.state ? "border-red-500" : ""}`}
                   >
-                    <option value="">Select State</option>
+                    <option value="">{t('checkout.selectState')}</option>
                     {INDIAN_STATES.map((state) => (
                       <option key={state} value={state}>
                         {state}
@@ -470,7 +472,7 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     name="zipCode"
-                    placeholder="PIN Code"
+                    placeholder={t('checkout.pinCode')}
                     value={formData.zipCode}
                     onChange={handleInputChange}
                     maxLength={6}
@@ -484,7 +486,7 @@ export default function CheckoutPage() {
                 <input
                   type="text"
                   name="phone"
-                  placeholder="Phone number"
+                  placeholder={t('checkout.phone')}
                   value={formData.phone}
                   onChange={handleInputChange}
                   maxLength={10}
@@ -502,7 +504,7 @@ export default function CheckoutPage() {
                   className="rounded"
                 />
                 <span className="text-sm text-muted-foreground">
-                  Save this information for next time
+                  {t('checkout.saveInfo')}
                 </span>
               </label>
             </div>
@@ -517,10 +519,10 @@ export default function CheckoutPage() {
               {isProcessing ? (
                 <>
                   <Loader2 className="size-4 animate-spin mr-2" />
-                  Processing...
+                  {t('checkout.processing')}
                 </>
               ) : (
-                "Place order"
+                t('checkout.placeOrder')
               )}
             </Button>
           </div>
@@ -558,17 +560,17 @@ export default function CheckoutPage() {
               {/* Order Summary */}
               <div className="border-t border-dashed pt-4 space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal - {cartItems.length} items</span>
+                  <span className="text-muted-foreground">{t('checkout.subtotalItems').replace('{count}', cartItems.length.toString())}</span>
                   <span className="font-medium">₹{subtotal.toFixed(0)}</span>
                 </div>
 
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span className="font-medium">Calculated at next step</span>
+                  <span className="text-muted-foreground">{t('checkout.shipping')}</span>
+                  <span className="font-medium">{t('checkout.calculatedNextStep')}</span>
                 </div>
 
                 <div className="border-t border-dashed pt-3 flex justify-between">
-                  <span className="font-semibold">Total</span>
+                  <span className="font-semibold">{t('checkout.total')}</span>
                   <div className="text-right">
                     <span className="text-xs text-muted-foreground">INR</span>
                     <div className="text-2xl font-bold text-primary">
@@ -592,7 +594,7 @@ export default function CheckoutPage() {
                 <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
                   <CheckCircle className="size-6 text-green-500" />
                 </div>
-                <h2 className="text-xl font-bold">Order Placed!</h2>
+                <h2 className="text-xl font-bold">{t('checkout.orderPlaced')}</h2>
               </div>
               <button
                 onClick={handleRedirectHome}
@@ -605,9 +607,9 @@ export default function CheckoutPage() {
             {/* Content */}
             <div className="p-6 space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">Thank you for your order!</h3>
+                <h3 className="font-semibold mb-2">{t('checkout.orderConfirmed')}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Your order has been successfully placed and is being prepared for shipment.
+                  {t('checkout.orderSuccessMsg')}
                 </p>
               </div>
 
@@ -615,34 +617,34 @@ export default function CheckoutPage() {
                 <div className="flex gap-3">
                   <div className="text-2xl">📦</div>
                   <div>
-                    <p className="font-semibold text-sm mb-1">Expected Delivery</p>
+                    <p className="font-semibold text-sm mb-1">{t('checkout.expectedDelivery')}</p>
                     <p className="text-sm text-muted-foreground">
-                      You can expect delivery within <span className="font-medium text-foreground">24 hours</span>
+                      {t('checkout.deliveryTime')}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                <p className="text-xs font-medium text-muted-foreground">Order Details:</p>
+                <p className="text-xs font-medium text-muted-foreground">{t('checkout.orderDetails')}</p>
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Order ID:</span>
+                    <span className="text-muted-foreground">{t('checkout.orderId')}:</span>
                     <span className="font-medium">{orderId}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Items:</span>
+                    <span className="text-muted-foreground">{t('checkout.items')}:</span>
                     <span className="font-medium">{cartItems.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Total:</span>
+                    <span className="text-muted-foreground">{t('checkout.total')}:</span>
                     <span className="font-medium">₹{total.toFixed(0)}</span>
                   </div>
                 </div>
               </div>
 
               <p className="text-xs text-muted-foreground text-center">
-                You will receive a confirmation email shortly with tracking information.
+                {t('checkout.confirmationEmail')}
               </p>
             </div>
 

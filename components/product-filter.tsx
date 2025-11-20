@@ -1,6 +1,7 @@
 "use client";
 
 import { X, ChevronUp, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { fruits } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -25,6 +26,7 @@ export function ProductFilter({
   onClose,
   products = [],
 }: ProductFilterProps) {
+  const { t } = useTranslation();
   const [tempCategories, setTempCategories] = useState<string[]>(selectedCategories);
 
   // Get unique product names from products if available, otherwise from fruits data
@@ -87,7 +89,7 @@ export function ProductFilter({
       >
         {/* Header */}
         <div className="sticky top-0 bg-background border-b border-dashed p-3 sm:p-6 flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-semibold">Filters</h2>
+          <h2 className="text-base sm:text-lg font-semibold">{t('filter.title')}</h2>
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-accent rounded-lg transition-colors flex-shrink-0"
@@ -101,7 +103,7 @@ export function ProductFilter({
           {/* Categories */}
           <div className="space-y-2">
             <h3 className="text-xs sm:text-sm font-semibold text-muted-foreground mb-3">
-              Fruit Type
+              {t('filter.categories')}
             </h3>
 
             {categories.map((category) => (
@@ -136,7 +138,7 @@ export function ProductFilter({
               size="sm"
               className="w-full"
             >
-              Apply Filters
+              {t('filter.apply')}
             </Button>
             <Button
               onClick={handleClear}
@@ -144,7 +146,7 @@ export function ProductFilter({
               size="sm"
               className="w-full"
             >
-              Clear Filters
+              {t('filter.clear')}
             </Button>
           </div>
         </div>
