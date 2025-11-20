@@ -227,7 +227,7 @@ export default function HomePage() {
         {/* Header with Mobile Filter Toggle */}
         <div className="flex items-center justify-between mb-8 px-6 max-w-(--breakpoint-xl) mx-auto w-full">
           <div>
-            <h1 className="text-4xl font-semibold mb-2">Fresh Fruits & Produce</h1>
+            <h1 className="text-4xl font-semibold mb-2">Fresh Products</h1>
             <p className="text-muted-foreground">
               Browse our collection of the freshest fruits, sourced directly from local farmers
             </p>
