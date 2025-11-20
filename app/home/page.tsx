@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Filter, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { HomeHeader } from "@/components/home-header";
 import { ProductCard } from "@/components/product-card";
 import { CartSidebar } from "@/components/cart-sidebar";
@@ -34,6 +35,7 @@ interface CartItem {
 const CART_STORAGE_KEY = "home-guardian-cart";
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -227,9 +229,9 @@ export default function HomePage() {
         {/* Header with Mobile Filter Toggle */}
         <div className="flex items-center justify-between mb-8 px-6 max-w-(--breakpoint-xl) mx-auto w-full">
           <div>
-            <h1 className="text-4xl font-semibold mb-2">Fresh Products</h1>
+            <h1 className="text-4xl font-semibold mb-2">{t('home.heading')}</h1>
             <p className="text-muted-foreground">
-              Browse our collection of the freshest fruits, sourced directly from local farmers
+              {t('home.description')}
             </p>
           </div>
           <button

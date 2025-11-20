@@ -4,6 +4,7 @@ import { Search, ShoppingCart, Settings } from "lucide-react";
 import { useState } from "react";
 import { OTPAuthModal } from "./otp-auth-modal";
 import { ProfileMenu } from "./ProfileMenu";
+import { LanguageToggle } from "./language-toggle";
 import { Button } from "./ui/button";
 import { useAuth } from "@/app/context/AuthContext";
 import Link from "next/link";
@@ -54,6 +55,7 @@ export function HomeHeader({
 
             {/* Right Section */}
             <div className="flex items-center gap-2 sm:gap-4">
+              <LanguageToggle />
               {!loading && (
                 <>
                   {user ? (

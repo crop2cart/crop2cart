@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Truck, Leaf, Heart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function EcommerceHero() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen py-12 sm:py-20 max-w-(--breakpoint-xl) mx-auto text-center px-4 sm:px-6">
       {/* Badge */}
@@ -13,19 +15,19 @@ export function EcommerceHero() {
 
       {/* Main Heading */}
       <h1 className="mt-4 sm:mt-5 max-w-4xl mx-auto text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold tracking-tighter text-balance mb-4 sm:mb-6">
-        Fresh Products Directly From Farmers
+        {t('hero.title')}
       </h1>
 
       {/* Subheading */}
       <p className="mt-4 sm:mt-6 max-w-2xl mx-auto text-sm sm:text-lg md:text-xl text-muted-foreground text-balance mb-6 sm:mb-8">
-        No middlemen. No markups. Just fresh, organic fruits delivered straight from local farmers to your doorstep in 24 hours.
+        {t('hero.subtitle')}
       </p>
 
       {/* CTA Buttons */}
       <div className="mt-8 sm:mt-12 flex gap-2 sm:gap-4 justify-center flex-wrap">
         <Link href="/home">
           <Button size="lg" className="text-sm sm:text-base">
-            Shop Fresh Fruits
+            {t('hero.button')}
           </Button>
         </Link>
       </div>

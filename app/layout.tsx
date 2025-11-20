@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Bricolage_Grotesque, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "./context/AuthContext";
 import { WebSocketProvider } from "./context/WebSocketContext";
+import { I18nProvider } from "@/components/i18n-provider";
 import "./globals.css";
 import "./skeletons.css";
 
@@ -31,13 +32,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <WebSocketProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
-            </ThemeProvider>
-          </WebSocketProvider>
-        </AuthProvider>
+        <I18nProvider>
+          <AuthProvider>
+            <WebSocketProvider>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                {children}
+              </ThemeProvider>
+            </WebSocketProvider>
+          </AuthProvider>
+        </I18nProvider>
       </body>
     </html>
   );
